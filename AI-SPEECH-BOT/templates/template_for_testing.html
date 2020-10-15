@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>Chat</title>
+
+
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous"> 
+		 
+		 
+		<!--link rel="stylesheet" type="text/css" href="/templates/design.css"-->
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+		<style>
+        body,html{
+height: 100%;
+margin: 0;
+background: #7F7FD5;
+ background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+  background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+}
+
+.chat{
+margin-top: auto;
+margin-bottom: auto;
+}
+.card{
+height: 500px;
+border-radius: 15px !important;
+background-color: rgba(0,0,0,0.4) !important;
+}
+.contacts_body{
+padding:  0.75rem 0 !important;
+overflow-y: auto;
+white-space: nowrap;
+}
+.msg_card_body{
+overflow-y: auto;
+}
+.msg_card_body::-webkit-scrollbar {
+display: none;
+}
+.card-header{
+border-radius: 15px 15px 0 0 !important;
+border-bottom: 0 !important;
+}
+.card-footer{
+border-radius: 0 0 15px 15px !important;
+border-top: 0 !important;
+}
+.container{
+align-content: center;
+}
+.search{
+border-radius: 15px 0 0 15px !important;
+background-color: rgba(0,0,0,0.3) !important;
+border:0 !important;
+color:white !important;
+}
+.search:focus{
+ box-shadow:none !important;
+   outline:0px !important;
+}
+.type_msg{
+background-color: rgba(0,0,0,0.3) !important;
+border:0 !important;
+color:white !important;
+height: 60px !important;
+overflow-y: auto;
+}
+.type_msg:focus{
+ box-shadow:none !important;
+   outline:0px !important;
+}
+.attach_btn{
+border-radius: 15px 0 0 15px !important;
+background-color: rgba(0,0,0,0.3) !important;
+border:0 !important;
+color: white !important;
+cursor: pointer;
+}
+.send_btn{
+border-radius: 0 15px 15px 0 !important;
+background-color: rgba(0,0,0,0.3) !important;
+border:0 !important;
+color: white !important;
+cursor: pointer;
+}
+.search_btn{
+border-radius: 0 15px 15px 0 !important;
+background-color: rgba(0,0,0,0.3) !important;
+border:0 !important;
+color: white !important;
+cursor: pointer;
+}
+.contacts{
+list-style: none;
+padding: 0;
+}
+.contacts li{
+width: 100% !important;
+padding: 5px 10px;
+margin-bottom: 15px !important;
+}
+.active{
+background-color: rgba(0,0,0,0.3);
+}
+.user_img{
+height: 70px;
+width: 70px;
+border:1.5px solid #f5f6fa;
+
+}
+.user_img_msg{
+height: 40px;
+width: 40px;
+border:1.5px solid #f5f6fa;
+
+}
+.img_cont{
+position: relative;
+height: 70px;
+width: 70px;
+}
+.img_cont_msg{
+height: 40px;
+width: 40px;
+}
+.online_icon{
+position: absolute;
+height: 15px;
+width:15px;
+background-color: #4cd137;
+border-radius: 50%;
+bottom: 0.2em;
+right: 0.4em;
+border:1.5px solid white;
+}
+.offline{
+background-color: #c23616 !important;
+}
+.user_info{
+margin-top: auto;
+margin-bottom: auto;
+margin-left: 15px;
+}
+.user_info span{
+font-size: 20px;
+color: white;
+}
+.user_info p{
+font-size: 10px;
+color: rgba(255,255,255,0.6);
+}
+.video_cam{
+margin-left: 50px;
+margin-top: 5px;
+}
+.video_cam span{
+color: white;
+font-size: 20px;
+cursor: pointer;
+margin-right: 20px;
+}
+.msg_cotainer{
+margin-top: auto;
+margin-bottom: auto;
+margin-left: 10px;
+border-radius: 25px;
+background-color: #82ccdd;
+padding: 10px;
+position: relative;
+}
+.msg_cotainer_send{
+margin-top: auto;
+margin-bottom: auto;
+margin-right: 10px;
+border-radius: 25px;
+background-color: #78e08f;
+padding: 10px;
+position: relative;
+}
+.msg_time{
+position: absolute;
+left: 0;
+bottom: -15px;
+color: rgba(255,255,255,0.5);
+font-size: 10px;
+}
+.msg_time_send{
+position: absolute;
+right:0;
+bottom: -15px;
+color: rgba(255,255,255,0.5);
+font-size: 10px;
+}
+.msg_head{
+position: relative;
+}
+#action_menu_btn{
+position: absolute;
+right: 10px;
+top: 10px;
+color: white;
+cursor: pointer;
+font-size: 20px;
+}
+.action_menu{
+z-index: 1;
+position: absolute;
+padding: 15px 0;
+background-color: rgba(0,0,0,0.5);
+color: white;
+border-radius: 15px;
+top: 30px;
+right: 15px;
+display: none;
+}
+.action_menu ul{
+list-style: none;
+padding: 0;
+margin: 0;
+}
+.action_menu ul li{
+width: 100%;
+padding: 10px 15px;
+margin-bottom: 5px;
+}
+.action_menu ul li i{
+padding-right: 10px;
+
+}
+.action_menu ul li:hover{
+cursor: pointer;
+background-color: rgba(0,0,0,0.2);
+}
+@media(max-width: 576px){
+.contacts_card{
+margin-bottom: 15px !important;
+}
+}
+
+//popup style  start 
+
+
+body {
+    background:#000000;
+}
+.popup {
+     position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background:#000080;
+    height:400px;
+    width:530px;
+    border-radius:7px;
+    border:1px solid #e5e5e5;
+    font-family:'helvetica neue';
+}
+
+.popup:hover{zoom:1.3;}
+.valid {
+    height:30px;
+    width:30px;
+    background:#fff;
+    margin:0 auto;
+    margin-top:30px;
+    border-radius:5px;
+}
+#Layer_2 {
+    margin:7px;
+}
+h2 {
+    color:white;
+    font-family:helvetica;
+    font-size:.9em;
+    text-align:center;
+    font-weight:bold;
+    line-height:10px;
+    margin-top:26px;
+}
+p1 {
+    color:white;
+    font-family:helvetica;
+    font-size:.75em;
+    text-align:center;
+    line-height:1px;
+    text-shadow: 0px 1px 1px #4CB572;
+}
+.bottom-popup {
+    width:100%;
+    background:#FFF;
+    -webkit-border-bottom-right-radius: 7px;
+    -webkit-border-bottom-left-radius: 7px;
+    -moz-border-radius-bottomright: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    margin-top:32px;
+    padding:30px 0 30px 0;
+}
+.start {
+    margin:-12px 28% 0 0;
+    border-radius:40px;
+    background:#FFF;
+    padding:6px 20px 6px 20px;
+    float:right;
+    -webkit-transition: all .4s ease-out;
+    -moz-transition: all .4s ease-out;
+    -ms-transition: all .4s ease-out;
+    -o-transition: all .4s ease-out;
+    transition: all .4s ease-out;
+}
+.start:hover {
+    border-radius:5px;
+    -webkit-transition: all .4s ease-out;
+    -moz-transition: all .4s ease-out;
+    -ms-transition: all .4s ease-out;
+    -o-transition: all .4s ease-out;
+    transition: all .4s ease-out;
+}
+#Layer_1 {
+    float:right;
+    margin:10px;
+}
+
+#GO{
+	position: relative;
+    left: 240px;
+	top: 100px;
+	
+}
+
+// pop up style end 
+
+
+//Boostrap Buttons 
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+
+
+		</style>
+	</head>
+
+
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-4 col-xl-3 chat">
+					<div class="card mb-sm-3 mb-md-0 contacts_card">
+					<div class="card-header">
+						<div class="input-group">
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+							</div>
+						</div>
+					</div >
+					<div class="card-body contacts_body">
+					<!-- define the features buttons here -->
+					<div>
+					<div class="row" style="margin-top:20px;width:340px">
+                    <div class="col " style="text-align: center;"> 
+                      <button type="button" class="btn btn-danger btn-circle btn-lg" ><i class="fa fa-table" aria-hidden="true"></i></button>
+					  <p style="color:white;">add error</p>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                     <button type="button" class="btn btn-primary btn-circle btn-lg"><i class="fa fa-book" aria-hidden="true"></i></button>
+					 <p style="color:white;">register error</p>
+                    </div>
+					</div>
+					<div class="row " style="margin-top:40px;width:340px">
+                    <div class="col" style="text-align: center;">
+                      <button type="button" class="btn btn-success btn-circle btn-lg"><i class="fa fa-plus" aria-hidden="true"></i></button>
+					  <p style="color:white;">add</p>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                     <button type="button" class="btn btn-info btn-circle btn-lg"><i class="fa fa-plus" aria-hidden="true"></i></button>
+					 <p style="color:white;">add</p>
+                    </div>
+					</div>
+					<div class="row" style="margin-top:40px;width:340px">
+                    <div class="col" style="text-align: center;">
+                      <button type="button" class="btn btn-warning btn-circle btn-lg"><i style="color:white;" class="fa fa-plus" aria-hidden="true"></i></button>
+                    <p style="color:white;">add</p>
+					</div>
+                    <div class="col" style="text-align: center;">
+                     <button type="button" class="btn btn-danger btn-circle btn-lg"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                     <p style="color:white;">add</p>
+					</div>
+					</div>
+					</div>
+					
+					
+			
+					</div>
+					<div class="card-footer"></div>
+				</div>
+			</div>
+
+       <!-- 2nd Halve -->
+
+
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card" >
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img">
+									<!-- <span class="online_icon"></span> -->
+								</div>
+								<div class="user_info">
+									<span>Louis AI Bot</span>
+									<p>Number Of Messages here</p>
+								</div>
+
+							</div>
+							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<div class="action_menu">
+								<ul>
+									<li><i class="fas fa-user-circle"></i> View profile</li>
+									<li><i class="fas fa-users"></i> Add to close friends</li>
+									<li><i class="fas fa-plus"></i> Add to group</li>
+									<li><i class="fas fa-ban"></i> Block</li>
+								</ul>
+							</div>
+						</div>
+						<div class="card-body msg_card_body" id="chatbox">
+							<!-- Define your texts here -->
+							<div class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg" id="firstimg" >
+									<img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer" id="firstmsg">
+								<div>	Hi, how can I help you? </div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="card-footer">
+							<div class="input-group" >
+								<div class="input-group-append">
+									<button class="input-group-text attach_btn" onclick=voiceResponse()><i class="material-icons">keyboard_voice</i></button>
+								</div>
+								<input id="textInput" type="text" name="msg" class="form-control type_msg" placeholder="Type your message..."></input>
+								<div class="input-group-append">
+									<button class="input-group-text send_btn" onclick="getBotResponse()"><i class="fas fa-location-arrow"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- POP-UP START -->
+
+		<div class="popup" style="display:none;"> <a href="#" class="close"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px" y="0px" width="10px" height="10px" viewBox="215.186 215.671 80.802 80.8"
+    enable-background="new 215.186 215.671 80.802 80.8" xml:space="preserve">
+        <polygon fill="#FFFFFF" points="280.486,296.466 255.586,271.566 230.686,296.471 215.19,280.964 240.086,256.066 215.186,231.17
+	230.69,215.674 255.586,240.566 280.475,215.671 295.985,231.169 271.089,256.064 295.987,280.96 "
+        />
+       </svg></a>
+
+    <div class="valid">
+        <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px" y="0px" width="15px" height="15px" viewBox="222.744 227.408 67.744 58.526"
+        enable-background="new 222.744 227.408 67.744 58.526" xml:space="preserve">
+            <path fill="#39BA6F" d="M250.062,285.934c-9.435-11.111-15.731-18.195-27.318-28.935l5.793-5.357
+	c6.778,3.28,11.076,5.774,18.693,11.204c14.32-16.25,23.783-24.495,41.372-35.438l1.886,4.335
+	C275.983,244.402,265.359,258.502,250.062,285.934z" />
+        </svg>
+    </div>
+     <h2>Welcome!</h2>
+
+    <p1></p1>
+    <div class="bottom-popup"><input class="start" type="text" placeholder="Please enter your name ..." id="" name="">
+    <button type="button" class="btn btn-success" id="GO" onclick="save()">save</button>
+    </div>
+    </div>
+	
+	  <!-- POP-UP END -->
+
+
+    <script>
+			function getBotResponse() {
+				var rawText = $("#textInput").val();
+				var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+rawText+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';
+				$("#textInput").val("");
+				$("#chatbox").append(userHtml);
+
+				var chatHistory = document.getElementById("chatbox");
+                   chatHistory.scrollTop = chatHistory.scrollHeight;
+				$.get("/get", { msg: rawText }).done(function(data) {         //data is the output or the response you got from the page
+					var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"> '+data+' </div></div>';
+					$("#chatbox").append(botHtml);
+
+				var chatHistory = document.getElementById("chatbox");
+	            chatHistory.scrollTop = chatHistory.scrollHeight;
+				});
+			}
+
+			$("#textInput").keypress(function(e) {
+				if (e.which == 13) {
+					getBotResponse();
+				}
+			});
+
+			function voiceResponse(){
+				$.get("/voice").done(function(data) {         //data is the output or the response you got from the page
+					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+data+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';
+					$("#chatbox").append(userHtml);
+					$("#textInput").val("");
+
+				var chatHistory = document.getElementById("chatbox");
+	       chatHistory.scrollTop = chatHistory.scrollHeight;
+
+                 $.get("/get", { msg: data }).done(function(data) {         //data is the output or the response you got from the page
+					var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"> '+data+' </div></div>';
+					$("#chatbox").append(botHtml);
+
+				var chatHistory = document.getElementById("chatbox");
+	            chatHistory.scrollTop = chatHistory.scrollHeight;
+				});
+
+				});
+
+				i=0;
+				while(i<300000000)
+				{
+				i++;
+			}
+
+				$("#textInput").val("Listening ... ");
+
+			}
+
+    </script>
+	
+	<script> 
+	//for popup
+	$(document).ready(function () {
+	$('.popup').fadeIn(2000,"swing");
+    $('.close').click(function (event) {
+        //event.preventDefault();      //used to prevent default behaviour if any
+        $('.popup').hide("slow");
+    });
+});  
+    
+	//for save button 
+	function save(){
+	$('.popup').hide("slow");
+	usernam=$(".start").val();
+	document.getElementById("firstmsg").style.display='none';
+	document.getElementById("firstimg").style.display='none';
+	var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"> Hi '+usernam+' , how can I help you? </div></div>';
+					$("#chatbox").append(botHtml);
+
+	var chatHistory = document.getElementById("chatbox");
+	chatHistory.scrollTop = chatHistory.scrollHeight;
+	}
+    </script>
+	</body>
+</html>
