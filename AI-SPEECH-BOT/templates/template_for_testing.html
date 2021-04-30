@@ -522,32 +522,82 @@ p1 {
          var bot_wants_to_ask_questions = false;
          var tag = "";
          var pending_questions = 0;
+         var mcq_asked = false;
          
+         
+            function saveAns(user_ans) {
+                $.get("/saveAnswer", {msg: user_ans }).done(function(data) {
+                       is_bot_question = false;
+                       mcq_asked = false;
+                       var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">Response Saved!</div></div>';
+            		   $("#chatbox").append(botHtml);
+        			   var chatHistory = document.getElementById("chatbox");
+    	               chatHistory.scrollTop = chatHistory.scrollHeight;
+    	               
+                       if(pending_questions != 0){
+                            getBotResponse();
+                       } 
+                 });
+            }
          
 			function getBotResponse() {
-				if(pending_questions != 0 && !is_bot_question) {
+			if(!mcq_asked) {
+    			if(pending_questions != 0 && !is_bot_question) {
                     
                    $.get("/ask", {question_tag: tag, question_number: pending_questions, msg: rawText }).done(function(data) {
-                       var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"> '+data+' </div></div>';
-            				 $("#chatbox").append(botHtml);
-
-        				    var chatHistory = document.getElementById("chatbox");
-    	                 chatHistory.scrollTop = chatHistory.scrollHeight;
-    	                 is_bot_question = true;
-    	                 pending_questions = pending_questions - 1;
+                   
+                       result_ask = data.split(":");
+                       options = [];
+                       if(result_ask.length > 1){
+                           options = result_ask[1].split("|");
+                       }
+                       
+                       var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"> '+result_ask[0]+' </div></div>';
+            		   $("#chatbox").append(botHtml);
+        			   var chatHistory = document.getElementById("chatbox");
+    	               chatHistory.scrollTop = chatHistory.scrollHeight;
+    	               
+    	               if(options.length != 0){
+        	               var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">';
+        	               var i;
+        	               for (i = 0; i < options.length; i++) {
+        	                   var func_name = '"saveAns('; 
+        	                   func_name += "'";
+        	                   func_name += options[i] + "'";
+        	                   func_name += ')"';
+            	               userHtml += '<button onclick='+ func_name +' type="button" class="btn btn-outline-success">' + options[i] + '</button>'
+        	               }
+        	               userHtml += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';
+        	               $("#chatbox").append(userHtml);
+        			       var chatHistory = document.getElementById("chatbox");
+                           chatHistory.scrollTop = chatHistory.scrollHeight;
+                           mcq_asked = true;
+                           pending_questions = pending_questions - 1;
+    	               }else{
+        	               is_bot_question = true;
+        	               pending_questions = pending_questions - 1;
+    	               }
+    	                 
+    	               
                    });          
              } else if (is_bot_question) {
-             var rawText = $("#textInput").val();
-                   var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+rawText+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';				
-        				 $("#textInput").val("");
-            			 $("#chatbox").append(userHtml);
-            			 var chatHistory = document.getElementById("chatbox");
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
-                 $.get("/saveAnswer", {msg: rawText }).done(function(data) {
-                     is_bot_question = false;
-                     if(pending_questions != 0){
-                         getBotResponse();
-                     } 
+                       var rawText = $("#textInput").val();
+                       var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+rawText+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';				
+        			   $("#textInput").val("");
+            		   $("#chatbox").append(userHtml);
+        			   var chatHistory = document.getElementById("chatbox");
+                       chatHistory.scrollTop = chatHistory.scrollHeight;
+                 
+                       $.get("/saveAnswer", {msg: rawText }).done(function(data) {
+                       is_bot_question = false;
+                       var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">Response Saved!</div></div>';
+            		   $("#chatbox").append(botHtml);
+        			   var chatHistory = document.getElementById("chatbox");
+    	               chatHistory.scrollTop = chatHistory.scrollHeight;
+    	               
+                       if(pending_questions != 0){
+                            getBotResponse();
+                       } 
                  });
              }else{
                    var rawText = $("#textInput").val();
@@ -576,6 +626,8 @@ p1 {
     	             }
     				});
              }
+			}
+				
 				
 			}
 

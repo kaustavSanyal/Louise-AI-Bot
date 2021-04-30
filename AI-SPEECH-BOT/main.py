@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 current_user = "Jane"
 
-questions_db = {"Syntax Error": [3, "Q1", "Q2", "Q3"]}
+questions_db = {"Syntax Error": [3, "Question 3 ?:YES|NO", "Question 2 ?", "Question 1 ?:YES|NO|GOD_KNOWS"]}
 
 
 
@@ -20,7 +20,7 @@ def home():
 @app.route("/saveAnswer")
 def get_bot_response_save_answer():
     userText = request.args.get('msg')
-    print("saving : ", userText)
+    print("saving :", userText)
     return "Saved"
 
 @app.route("/ask")
