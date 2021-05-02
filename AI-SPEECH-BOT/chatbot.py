@@ -61,20 +61,25 @@ output = []
 
 out_empty = [0 for _ in range(len(labels))]
 
-for x, doc in enumerate(docs_x):
-    bag = []
 
+
+for x, doc in enumerate(docs_x):
+    
+    bag = []
+    
     wrds = [stemmer.stem(w.lower()) for w in doc]
 
+    
     for w in words:
         if w in wrds:
             bag.append(1)
         else:
             bag.append(0)
 
+    
     output_row = out_empty[:]
     output_row[labels.index(docs_y[x])] = 1
-
+    
     training.append(bag)
     output.append(output_row)
     
@@ -89,7 +94,7 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 
 model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-model.save("model.tflearn")
+model.save("log/model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
