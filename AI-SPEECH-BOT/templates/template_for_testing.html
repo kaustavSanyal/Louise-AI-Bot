@@ -515,7 +515,7 @@ p1 {
     </div>
 	
 	  <!-- POP-UP END -->
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
          var is_bot_question = false;
@@ -525,19 +525,42 @@ p1 {
          var mcq_asked = false;
          
          
-            function saveAns(user_ans) {
-                $.get("/saveAnswer", {msg: user_ans }).done(function(data) {
-                       is_bot_question = false;
-                       mcq_asked = false;
-                       var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">Response Saved!</div></div>';
-            		   $("#chatbox").append(botHtml);
-        			   var chatHistory = document.getElementById("chatbox");
-    	               chatHistory.scrollTop = chatHistory.scrollHeight;
-    	               
-                       if(pending_questions != 0){
-                            getBotResponse();
-                       } 
-                 });
+            function saveAns(x) {
+                var id = document.querySelector('input[name="'+x+'"]:checked').id;
+                var user_ans = document.querySelector('label[for="' + id + '"]').innerHTML;
+                
+                
+                swal({
+                    title: "Are you sure?",
+                    text: "Saving : " + user_ans,
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                       $.get("/saveAnswer", {msg: user_ans }).done(function(data) {
+                           is_bot_question = false;
+                           mcq_asked = false;
+                           var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://image.flaticon.com/icons/png/512/1698/1698535.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">Saved Info : '+ user_ans +'</div></div>';
+                		   $("#chatbox").append(botHtml);
+            			   var chatHistory = document.getElementById("chatbox");
+        	               chatHistory.scrollTop = chatHistory.scrollHeight;
+        	               
+        	               swal("Reply saved successfully!", {
+                               icon: "success",
+                           });
+                           
+                           if(pending_questions != 0){
+                                getBotResponse();
+                           } 
+                       });
+                        
+                    } else {
+                        swal("No replies saved!");
+                    }
+                });
+                 
             }
          
 			function getBotResponse() {
@@ -558,16 +581,19 @@ p1 {
     	               chatHistory.scrollTop = chatHistory.scrollHeight;
     	               
     	               if(options.length != 0){
-        	               var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">';
+        	               var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"><div class="msg_cotainer_send">';
         	               var i;
         	               for (i = 0; i < options.length; i++) {
-        	                   var func_name = '"saveAns('; 
-        	                   func_name += "'";
-        	                   func_name += options[i] + "'";
-        	                   func_name += ')"';
-            	               userHtml += '<button onclick='+ func_name +' type="button" class="btn btn-outline-success">' + options[i] + '</button>'
+            	               userHtml += '<div class="form-check"><input class="form-check-input" type="radio" name="';
+            	               userHtml += result_ask[0] + '" id="';
+            	               userHtml += result_ask[0] + i + '"><label class=';
+            	               userHtml += '"form-check-label" for="'+ result_ask[0] + i +'">' + options[i] + '</label></div>';
+            	                       
         	               }
-        	               userHtml += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';
+        	               var func_name = '"saveAns('; 
+    	                   func_name += "'" + result_ask[0] + "'";
+    	                   func_name += ')"';
+        	               userHtml += '<button type="button" onclick='+ func_name +' class="btn btn-outline-danger">SUBMIT</button></div></div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';
         	               $("#chatbox").append(userHtml);
         			       var chatHistory = document.getElementById("chatbox");
                            chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -601,7 +627,7 @@ p1 {
                  });
              }else{
                    var rawText = $("#textInput").val();
-                   var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+rawText+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';				
+                   var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"> '+rawText+' </div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>';						   
         				 $("#textInput").val("");
             			 $("#chatbox").append(userHtml);
             			 var chatHistory = document.getElementById("chatbox");
